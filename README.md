@@ -18,6 +18,8 @@
 |   └── docker命令.md
 |—— csdn博客.md
 |—— github项目.md
+|—— pending计划.md
+|—— pending计划 // 暂存pending计划相关资料
 └── 电子书.md
     |—— 《JavaScript权威指南(第6版)(中文版)》
     |—— 《JavaScript高级程序设计(第3版)》
