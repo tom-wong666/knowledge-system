@@ -7,14 +7,15 @@
 
 .
 ├── README.md
-├── 前端基础
+├── WEB前端知识
 │   ├── 思维导图
 │   │   ├── 1-31_Bsic_My_PHP_H4_JS_CSS.xmind
 │   │   ├── 32_51_JScore.xmind
 │   │   ├── 52_70_H5_Boot_node.xmind
 │   │   └── 71_vue_angular.xmind
-│   └── 插件资源
-├── 服务部署
+│   ├── 插件资源
+│   └── 浏览器原理
+├── 远程服务部署
 │   ├── 阿里云.md
 │   └── docker命令.md
 ├── csdn博客.md
