@@ -13,23 +13,23 @@
 ## 目录结构
 
 .  
-│── README.md  
-│── WEB前端知识  
-│   │── 思维导图  
-│   │   │── 1-31_Bsic_My_PHP_H4_JS_CSS.xmind  
-│   │   │── 32_51_JScore.xmind  
-│   │   │── 52_70_H5_Boot_node.xmind  
+├── README.md  
+├── WEB前端知识  
+│   ├── 思维导图  
+│   │   ├── 1-31_Bsic_My_PHP_H4_JS_CSS.xmind  
+│   │   ├── 32_51_JScore.xmind  
+│   │   ├── 52_70_H5_Boot_node.xmind  
 │   │   └── 71_vue_angular.xmind  
-│   │── 插件资源  
+│   ├── 插件资源  
 │   └── 浏览器原理  
-│── 远程服务部署  
-│   │── 阿里云.md  
+├── 远程服务部署  
+│   ├── 阿里云.md  
 │   └── docker命令.md  
-│── csdn博客.md  
-│── github项目.md  
-│── pending计划.md  
-│── pending计划 // 文件夹，暂存pending计划相关资料  
+├── csdn博客.md  
+├── github项目.md  
+├── pending计划.md  
+├── pending计划 // 文件夹，暂存pending计划相关资料  
 └── 电子书.md  
-│   │── 《JavaScript权威指南(第6版)(中文版)》  
-│   │── 《JavaScript高级程序设计(第3版)》  
+│   ├── 《JavaScript权威指南(第6版)(中文版)》  
+│   ├── 《JavaScript高级程序设计(第3版)》  
 │   └── 《正则表达式必知必会》  
