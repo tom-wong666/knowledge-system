@@ -8,7 +8,7 @@ sudo service docker restart // 重启docker服务
 service docker stop // 关闭docker
 systemctl stop docker // 关闭docker
 docker rmi [镜像名字] // 删除docker镜像
-docker image rm // 删除docker镜像
+docker image rm [镜像名字]// 删除docker镜像
 docker ps // 查询正在运行的container容器
 dokcer ps -a // 查询所有container容器
 docker stop containerId/Name // 暂停某个容器
@@ -44,3 +44,74 @@ docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/
 ## php容器命令
 
 ## mySQL容器命令
+
+## docker nginx建立静态资源服务器
+1，环境保证centOS 7 安装docker 拉取nginx镜像
+2，创建一个存放静态资源的目录，我的是source目录
+mkdir -p /source/data
+3,创建并编辑nginx.conf，我的nginx.conf放在/source路径下
+vim nginx.conf
+写入文章底部的内容
+4，执行 docker 实例创建命令
+docker run --name source-nginx -p 90:80 -v /source/data:/data -v /source/nginx.conf:/etc/nginx/nginx.conf -d nginx
+说明：
+-p 90:80： 将容器的 80 端口映射到主机的 90 端口。
+--name source-nginx：将容器命名为 source-nginx。
+-v /source/data:/data：将我们自己创建的data目录挂载容器内的data目录(容器内的data目录是我们在如下root配置中生成的，目录名字随意)。
+    location / {
+        root   /data;
+        index  index.html index.htm;
+    }
+-v /source/nginx.conf:/etc/nginx/nginx.conf：将我们自己创建的 nginx.conf 挂载到容器的 /etc/nginx/nginx.conf,这里我们提前在写入了nginx.conf的内容，用于覆盖容器的配置。
+提醒：以上location配置是容易出错的地方
+1，里面的root配置，代表资源启动位置,资源'示例图片.png'放入data后，访问时直接'http://ip:端口/实例图片.png'就可以了，即跨过data这个目录访问才对。
+2，第二个data是我们root配置产生的资源启动位置，外部挂载时一定要挂载到这个位置
+-v /source/data:/data
+
+nginx.conf的内容：
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    server {
+        listen       80;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   /images;
+            index  index.html index.htm;
+        }
+    }
+
+    include /etc/nginx/conf.d/*.conf;
+}
+
