@@ -47,7 +47,7 @@ docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/
 
 ## docker nginx建立静态资源服务器
 1，环境保证centOS 7 安装docker 拉取nginx镜像
-2，创建一个存放静态资源的目录，我的是source目录
+2，创建一个存放静态资源的目录，我的是/source/data目录
 mkdir -p /source/data
 3,创建并编辑nginx.conf，我的nginx.conf放在/source路径下
 vim nginx.conf
