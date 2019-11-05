@@ -23,7 +23,9 @@
 │   ├── 插件资源  
 │   └── 浏览器原理  
 ├── 远程服务部署  
-│   ├── 阿里云.md  
+│   ├── 阿里云.md 
+│   ├── bash.md   
+│   ├── nginx.md  
 │   └── docker命令.md  
 ├── csdn博客.md  
 ├── github项目.md  
