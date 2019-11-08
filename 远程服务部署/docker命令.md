@@ -1,4 +1,4 @@
-# docker命令集合
+# docker命令集合---相关操作参考菜鸟教程整理一份
 
 ## 基础命令
 systemctl start docker // 启动docker
@@ -43,7 +43,7 @@ docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/
 提醒：挂载时必须保证映射双方的内容一致，www和logs初始都是空目录，所以不用预先copy，nginx.conf必须预先copy，因为容器内非空；
 ## php容器命令
 
-## mySQL容器命令
+## mySQL容器命令+mySQL连接
 
 ## docker nginx建立静态资源服务器
 1，环境保证centOS 7 安装docker 拉取nginx镜像
