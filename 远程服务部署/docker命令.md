@@ -41,9 +41,14 @@ docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/
 -v /sourceNginx/conf/nginx.conf:/etc/nginx/nginx.conf：将我们自己创建的 nginx.conf 挂载到容器的 /etc/nginx/nginx.conf。
 -v /sourceNginx/logs:/var/log/nginx：将我们自己创建的 logs 挂载到容器的 /var/log/nginx。
 提醒：挂载时必须保证映射双方的内容一致，www和logs初始都是空目录，所以不用预先copy，nginx.conf必须预先copy，因为容器内非空；
+
 ## php容器命令
 
+https://www.runoob.com/docker/docker-install-php.html
+
 ## mySQL容器命令+mySQL连接
+
+https://www.runoob.com/docker/docker-install-mysql.html
 
 ## docker nginx建立静态资源服务器
 1，环境保证centOS 7 安装docker 拉取nginx镜像
