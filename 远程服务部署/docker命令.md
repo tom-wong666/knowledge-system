@@ -18,6 +18,13 @@ docker rm $(docker ps -a -q) // 删除所有容器
 docker container restart egmp-console-test // 重启某个容器
 docker exec -it [容器ID] /bin/bash // 进入某个container容器
 exit // 退出container容器
+// 进入container内部修改nginx配置的方法
+'但是我们想要改变配置文件nginx.conf ，进入容器,命令：
+docker exec -it nginx bash
+nginx.conf配置文件在 /etc/nginx/ 下面，但是你使用vim nginx.conf 或者vi nginx.conf会发现vi或者vim命令没有用
+解决办法：apt-get  update  完成之后 apt-get install vim
+此时你就可以自己定制nginx.con文件了
+p.s.同理，进入container以后，ll命令一样不能使用，但是vim ng加tab会默认填充到vim nginx.conf'
 
 ## nginx容器命令
 1,以下命令使用 NGINX 默认的配置来启动一个 Nginx 容器实例：
