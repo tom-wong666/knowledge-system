@@ -119,7 +119,7 @@ http {
         #access_log  logs/host.access.log  main;
 
         location / {
-            root   /images;
+            root   /data;
             index  index.html index.htm;
         }
     }
