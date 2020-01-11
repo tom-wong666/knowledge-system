@@ -1,6 +1,7 @@
 # docker命令集合---相关操作参考菜鸟教程整理一份
 
-## 基础命令
+## 基础命令  
+
 systemctl start docker // 启动docker
 sudo systemctl daemon-reload // 守护进程重启
 systemctl restart  docker // 重启docker服务
@@ -26,7 +27,8 @@ nginx.conf配置文件在 /etc/nginx/ 下面，但是你使用vim nginx.conf 或
 此时你就可以自己定制nginx.con文件了
 p.s.同理，进入container以后，ll命令一样不能使用，但是vim ng加tab会默认填充到vim nginx.conf'
 
-## nginx容器命令
+## nginx容器命令  
+
 1,以下命令使用 NGINX 默认的配置来启动一个 Nginx 容器实例：
 docker run --name runoob-nginx-test -p 8081:80 -d nginx
 2,首先，创建目录 nginx, 用于存放后面的相关东西。
@@ -57,7 +59,8 @@ https://www.runoob.com/docker/docker-install-php.html
 
 https://www.runoob.com/docker/docker-install-mysql.html
 
-## docker nginx建立静态资源服务器
+## docker nginx建立静态资源服务器  
+
 1，环境保证centOS 7 安装docker 拉取nginx镜像
 2，创建一个存放静态资源的目录，我的是/source/data目录
 mkdir -p /source/data
@@ -87,11 +90,9 @@ worker_processes  1;
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
 
-
 events {
     worker_connections  1024;
 }
-
 
 http {
     include       /etc/nginx/mime.types;
