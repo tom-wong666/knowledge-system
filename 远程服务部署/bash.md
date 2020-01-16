@@ -32,3 +32,11 @@ esc q! // 不保存退出
 esc wq // 保存退出
 
 查看端口占用情况 lsof -i:端口号
+
+查看Java进程获取pid号：
+
+ps -ef|grep java|grep -v grep
+
+部署Javajar包并指定输出日志文件（null不输出）：
+
+nohup java -jar xx.jar >/dev/null &
