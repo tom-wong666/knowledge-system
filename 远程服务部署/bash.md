@@ -40,3 +40,5 @@ ps -ef|grep java|grep -v grep
 部署Javajar包并指定输出日志文件（null不输出）：
 
 nohup java -jar xx.jar >/dev/null &
+
+&是必须的
