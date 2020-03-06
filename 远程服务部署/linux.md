@@ -48,3 +48,9 @@ kill -9 进程号(对应以上30110)
 部署Javajar包并指定输出日志文件（null不输出）：
 
 nohup java -jar xiaoa-0.0.2.jar >/dev/null &
+
+部署Javajar包并指定输出日志文件（null不输出）：
+
+nohup java -jar xx.jar >/dev/null &
+
+&是必须的
