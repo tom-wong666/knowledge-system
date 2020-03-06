@@ -13,7 +13,7 @@ docker image rm [镜像名字]// 删除docker镜像
 docker ps // 查询正在运行的container容器
 dokcer ps -a // 查询所有container容器
 docker stop containerId/Name // 暂停某个容器
-coker rm contanerId/Name // 删除某个容器
+docker rm contanerId/Name // 删除某个容器
 docker stop $(docker ps -a -q) // 停止所有容器 
 docker rm $(docker ps -a -q) // 删除所有容器
 docker container restart egmp-console-test // 重启某个容器
@@ -35,6 +35,8 @@ docker run --name runoob-nginx-test -p 8081:80 -d nginx
 mkdir -p /sourceNginx/www /sourceNginx/logs /sourceNginx/conf
 3,拷贝容器内 Nginx 配置文件到本地当前目录下的 sourceNginx 目录：
 docker cp runoob-nginx-test:/etc/nginx/nginx.conf /sourceNginx/conf
+docker cp runoob-nginx-test:/etc/nginx/conf.d /sourceNginx
+docker cp runoob-nginx-test:/etc/nginx /sourceNginx
 说明：
  www: 目录将映射为 nginx 容器配置的虚拟目录。
  logs: 目录将映射为 nginx 容器的日志目录。
@@ -42,7 +44,7 @@ docker cp runoob-nginx-test:/etc/nginx/nginx.conf /sourceNginx/conf
 提醒：如果想把/etc/nginx/配置文件全部挂载出来，需要注意新建启动容器时的挂载目录层次要对上，比如如下命令，会在/sourceNginx下新增nginx文件夹，实现nginx配置目录全部挂载
 docker cp runoob-nginx-test:/etc/nginx /sourceNginx
 4,部署命令
-docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/html -v /sourceNginx/conf/nginx.conf:/etc/nginx/nginx.conf -v /sourceNginx/logs:/var/log/nginx nginx
+docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/html -v /sourceNginx/conf/conf.d:/etc/nginx/conf.d -v /sourceNginx/logs:/var/log/nginx nginx
 说明：
 -p 90:80： 将容器的 80 端口映射到主机的 90 端口。
 --name source-nginx：将容器命名为 source-nginx。
@@ -50,6 +52,86 @@ docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/
 -v /sourceNginx/conf/nginx.conf:/etc/nginx/nginx.conf：将我们自己创建的 nginx.conf 挂载到容器的 /etc/nginx/nginx.conf。
 -v /sourceNginx/logs:/var/log/nginx：将我们自己创建的 logs 挂载到容器的 /var/log/nginx。
 提醒：挂载时必须保证映射双方的内容一致，www和logs初始都是空目录，所以不用预先copy，nginx.conf必须预先copy，因为容器内非空；
+
+## docker nginx配置https--感悟，善用logs用于调错
+1,以下命令使用 NGINX 默认的配置来启动一个 Nginx 容器实例：
+docker run --name runoob-nginx-test -p 8081:80 -d nginx
+2,首先，创建目录 moXiang, 用于存放后面的相关东西。
+mkdir -p /moXiang/www /moXiang/logs
+3,拷贝容器内 Nginx 配置文件到本地当前目录下的 sourceNginx 目录：
+docker cp runoob-nginx-test:/etc/nginx/conf.d /moXiang
+此时/moXiang下有三个目录：www logs moXiang
+4，进入/moXiang/conf.d 新建cert文件夹，存放证书3430736_www.moxiang.online.key 和 3430736_www.moxiang.online.pem
+5，进入/moXiang/conf.d 新建ssl.conf，键入如下内容
+vim ssl.conf
+## 以下属性中以ssl开头的属性代表与证书配置有关，其他属性请根据自己的需要进行配置。
+server {
+  listen 443 ssl;   #SSL协议访问端口号为443。此处如未添加ssl，可能会造成Nginx无法启动。
+  server_name www.moxiang.online;  #将localhost修改为您证书绑定的域名，例如：www.example.com。
+  root html;
+  index index.html index.htm;
+  ssl_certificate conf.d/cert/3430736_www.moxiang.online.pem;   #将domain name.pem替换成您证书的文件名。
+  ssl_certificate_key conf.d/cert/3430736_www.moxiang.online.key;   #将domain name.key替换成您证书的密钥文件名。
+  ssl_session_timeout 5m;
+  ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;  #使用此加密套件。
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;   #使用该协议进行配置。
+  ssl_prefer_server_ciphers on;
+  location / {
+    # 这个路径对应/etc/nginx/html
+    root html;   #站点目录。
+    index index.html index.htm;
+  }
+}
+esc-->:-->wq(保存并退出，退出不保存时q!)
+4,部署命令
+docker run -d -p 443:443 --name https-nginx -v /moXiang/www:/etc/nginx/html  -v /moXiang/conf.d:/etc/nginx/conf.d -v /moXiang/logs:/var/log/nginx nginx
+和普通80服务的区别在于：‘挂在目录的配置不同’,这个不同是有location root决定的
+server {
+    listen       80;
+    server_name  localhost;
+
+    #charset koi8-r;
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+        # 这里规定了全路径的启动位置
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+}
+
 
 ## php容器命令
 

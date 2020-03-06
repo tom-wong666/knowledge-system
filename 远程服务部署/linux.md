@@ -18,6 +18,8 @@ mv file1 file2
 mkdir [-p] 目录名 // 创建新文件  
 说明:  
 参数：-p 确保目录名称存在，如果目录不存在的就新创建一个  
+创建文件
+如：touch a.txt
 
 $ rm -rf 文件夹名字 // 删除某个文件夹  
 说明：  
@@ -36,8 +38,13 @@ esc wq // 保存退出
 查看Java进程获取pid号：
 
 ps -ef|grep java|grep -v grep
+
+root     30110     1  2 14:18 pts/0    00:00:13 java -Xdebug -Xrunjdwp:transport=dt_socket,address=8866,server=y,suspend=n -jar /javaXiaoa/dev/xiaoa-0.0.2.jar
+
+结束结束进程
+kill -9 进程号(对应以上30110)
  
 
 部署Javajar包并指定输出日志文件（null不输出）：
 
-nohup java -jar xx.jar >/dev/null &
+nohup java -jar xiaoa-0.0.2.jar >/dev/null &
