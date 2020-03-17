@@ -34,6 +34,7 @@ docker run --name runoob-nginx-test -p 8081:80 -d nginx
 2,首先，创建目录 nginx, 用于存放后面的相关东西。
 mkdir -p /sourceNginx/www /sourceNginx/logs /sourceNginx/conf
 3,拷贝容器内 Nginx 配置文件到本地当前目录下的 sourceNginx 目录：
+如下三选一，建议3，注意www挂在
 docker cp runoob-nginx-test:/etc/nginx/nginx.conf /sourceNginx/conf
 docker cp runoob-nginx-test:/etc/nginx/conf.d /sourceNginx
 docker cp runoob-nginx-test:/etc/nginx /sourceNginx
@@ -41,10 +42,12 @@ docker cp runoob-nginx-test:/etc/nginx /sourceNginx
  www: 目录将映射为 nginx 容器配置的虚拟目录。
  logs: 目录将映射为 nginx 容器的日志目录。
  conf: 目录里的配置文件将映射为 nginx 容器的配置文件。
-提醒：如果想把/etc/nginx/配置文件全部挂载出来，需要注意新建启动容器时的挂载目录层次要对上，比如如下命令，会在/sourceNginx下新增nginx文件夹，实现nginx配置目录全部挂载
+提醒：如果想把/etc/nginx/配置文件全部挂载出来，需要注意新建启动容器时的挂载目录层次要对上，比如如下命令，会在/sourceNginx下新增nginx文件夹，实现nginx配置目录全部挂载/usr/share/nginx/html，而不要挂在到nginx里面的html，nginx挂在也要对应上
 docker cp runoob-nginx-test:/etc/nginx /sourceNginx
-4,部署命令
+4,部署命令1
 docker run -d -p 90:80 --name source-nginx -v /sourceNginx/www:/usr/share/nginx/html -v /sourceNginx/conf/conf.d:/etc/nginx/conf.d -v /sourceNginx/logs:/var/log/nginx nginx
+命令2
+docker run -d -p 8091:80 --name echarts-map -v /echarts-map/www:/usr/share/nginx/html -v /echarts-map/nginx:/etc/nginx -v /echarts-map/logs:/var/log/nginx nginx
 说明：
 -p 90:80： 将容器的 80 端口映射到主机的 90 端口。
 --name source-nginx：将容器命名为 source-nginx。
