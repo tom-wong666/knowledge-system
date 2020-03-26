@@ -12,3 +12,7 @@ git push
 
 git stash  缓存  
 git stash pop  还原缓存  
+
+## 远程主库和本地个人库同步--然后push到远程个人库
+$ git pull upstream master
+
