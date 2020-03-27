@@ -144,7 +144,7 @@ https://www.runoob.com/docker/docker-install-php.html
 
 https://www.runoob.com/docker/docker-install-mysql.html
 
-## docker nginx建立静态资源服务器  
+## docker nginx建立静态资源服务器  ---应该把log挂在出来方便调错
 
 1，环境保证centOS 7 安装docker 拉取nginx镜像
 2，创建一个存放静态资源的目录，我的是/source/data目录
