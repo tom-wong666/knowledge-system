@@ -66,7 +66,32 @@ docker cp runoob-nginx-test:/etc/nginx/conf.d /moXiang
 此时/moXiang下有三个目录：www logs moXiang
 4，进入/moXiang/conf.d 新建cert文件夹，存放证书3430736_www.moxiang.online.key 和 3430736_www.moxiang.online.pem
 5，进入/moXiang/conf.d 新建ssl.conf，键入如下内容
+
+# 挂载位置补充说明
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+对应 -v /root/networkControl/www:/usr/share/nginx/html
+
 vim ssl.conf
+注意：代理转发配置在ssl中，例如
+  location / {
+    # 这个路径对应/etc/nginx/html
+    root html;   #站点目录。
+    index index.html index.htm;
+  }
+  location /api {
+      rewrite ^.+api/?(.*)$ /$1 break;
+      proxy_pass https://v.952100.com:9028;
+  }
+  location /fonts {
+      proxy_pass http://119.23.111.171:9004;
+  }
+  location /map {
+      proxy_pass http://119.23.111.171:9004;
+  }
+
 ## 以下属性中以ssl开头的属性代表与证书配置有关，其他属性请根据自己的需要进行配置。
 server {
   #SSL协议访问端口号为443。此处如未添加ssl，可能会造成Nginx无法启动。
