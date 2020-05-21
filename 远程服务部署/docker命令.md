@@ -113,10 +113,40 @@ server {
   }
 }
 esc-->:-->wq(保存并退出，退出不保存时q!)
+增加备注：
+也可以在default.conf同级建立ssl.conf,参考如下配置：
+server {
+  listen 443 ssl;   #SSL协议访问端口号为443。此处如未添加ssl，可能会造成Nginx无法启动。
+  server_name www.v.952100.com;  #将localhost修改为您证书绑定的域名，例如：www.example.com。
+  root html;
+  index index.html index.htm;
+  ssl_certificate conf.d/cert/v.952100.com.pem;   #将domain name.pem替换成您证书的文件名。
+  ssl_certificate_key conf.d/cert/v.952100.com.key;   #将domain name.key替换成您证书的密钥文件名。
+  ssl_session_timeout 5m;
+  ssl_ciphers HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM;  #使用此加密套件。
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;   #使用该协议进行配置。
+  ssl_prefer_server_ciphers on;
+  location / {
+    # 这个路径对应/etc/nginx/html
+    root html;   #站点目录。
+    index index.html index.htm;
+  }
+  location /api {
+      rewrite ^.+api/?(.*)$ /$1 break;
+      proxy_pass https://v.952100.com:9028;
+  } 
+  location /fonts {
+      proxy_pass http://119.23.111.171:9004;
+  }
+  location /map {
+      proxy_pass http://119.23.111.171:9004;
+  }
+}
 4,部署命令
 docker run -d -p 443:443 --name https-nginx -v /moXiang/www:/etc/nginx/html  -v /moXiang/conf.d:/etc/nginx/conf.d -v /moXiang/logs:/var/log/nginx nginx
+docker run -d -p 444:443 --name https-test -v /moXiangTest/www:/etc/nginx/html  -v /moXiangTest/conf.d:/etc/nginx/conf.d -v /moXiangTest/logs:/var/log/nginx nginx
 说明：1，和普通80服务的区别在于：‘挂在目录的配置不同’,这个不同是有location root决定的
-      2，-p 443:443 前面的443指向外部主机，后面443指向容器内部nginx的https服务端口
+      2，-p 443:443 前面的443指向外部主机，后面443指向容器内部nginx的https服务端口，外部主机的端口可以不用443
 server {
     listen       80;
     server_name  localhost;
