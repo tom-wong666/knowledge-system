@@ -144,6 +144,7 @@ server {
 }
 4,部署命令
 docker run -d -p 443:443 --name https-nginx -v /moXiang/www:/etc/nginx/html  -v /moXiang/conf.d:/etc/nginx/conf.d -v /moXiang/logs:/var/log/nginx nginx
+docker run -d -p 443:443 --name https-easywork -v /xiaoa/www:/etc/nginx/html  -v /xiaoa/conf.d:/etc/nginx/conf.d -v /xiaoa/logs:/var/log/nginx nginx
 docker run -d -p 444:443 --name https-test -v /moXiangTest/www:/etc/nginx/html  -v /moXiangTest/conf.d:/etc/nginx/conf.d -v /moXiangTest/logs:/var/log/nginx nginx
 说明：1，和普通80服务的区别在于：‘挂在目录的配置不同’,这个不同是有location root决定的
       2，-p 443:443 前面的443指向外部主机，后面443指向容器内部nginx的https服务端口，外部主机的端口可以不用443
